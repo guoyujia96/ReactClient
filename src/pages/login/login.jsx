@@ -1,35 +1,37 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, message } from 'antd'
-import {regLogin} from "../../api/index"
+import { regLogin } from "../../api/index"
 import "./index.less"
 import logo from "../../assets/image/logo.png"
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
 import { Redirect } from 'react-router'
 
+import cookie from "react-cookies"
+
 const layout = {
     labelCol: {
-      span: 8,
+        span: 8,
     },
     wrapperCol: {
-      span: 16,
+        span: 16,
     },
-  };
-  const tailLayout = {
+};
+const tailLayout = {
     wrapperCol: {
-      offset: 8,
-      span: 16,
+        offset: 8,
+        span: 16,
     },
-  };
+};
 export default class Login extends Component {
-  
-     onFinish = (values) => {
+
+    onFinish = (values) => {
         // console.log('Success:', values);
-        const {username,password} = values;
-        regLogin(username,password).then(response => {
-            console.log("成功了",response)//返回的数据包含status和data
+        const { username, password } = values;
+        regLogin(username, password).then(response => {
+            console.log("成功了", response)//返回的数据包含status和data
             const result = response
-            if(result.status === 0){
+            if (result.status === 0) {
                 // 登陆成功
                 message.success("登录成功")
                 console.log(result.data)
@@ -39,24 +41,30 @@ export default class Login extends Component {
                 // 通过js实现页面跳转，在事件回调函数里的跳转
                 // 跳转到管理界面:因为不需要回退，所以不要push()用replace()
                 this.props.history.replace('/')
-            }else{
+            } else {
                 // 登录失败，提示错误信息
                 message.error(result.msg)
             }
         }).catch(error => {
-            console.log("失败了",error)
+            console.log("失败了", error)
         }); // alt + <= 回退
-      };
-    
-       onFinishFailed = (errorInfo) => {
+    };
+
+    onFinishFailed = (errorInfo) => {
         console.log('校验Failed:', errorInfo);
-      };
+    };
     render() {
 
         // 如果已经登录，自动跳转到管理页面
-        const user = memoryUtils.user
-        if(user && user._id){
-            return <Redirect to="/"/>
+        // const user = memoryUtils.user
+
+        var cookieStr = cookie.load('user')
+        if (cookieStr) {
+            const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
+            // console.log('cookie' , user)
+            if (user && user._id) {
+                return <Redirect to="/" />
+            }
         }
 
         return (
@@ -85,18 +93,18 @@ export default class Login extends Component {
                                 {
                                     required: true,
                                     message: '请输入用户名',
-                                    whitespace:true
+                                    whitespace: true
                                 },
                                 {
-                                    max:12,message:"用户名最多12位"
+                                    max: 12, message: "用户名最多12位"
                                 },
                                 {
-                                    min:4,message:"用户名最少4位"
+                                    min: 4, message: "用户名最少4位"
                                 },
                                 {
-                                    pattern:/^[a-zA-Z0-9_]+$/,message:'用户名必须是英文、数组或下划线组成'
+                                    pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数组或下划线组成'
                                 }
-        
+
                             ]}
                         >
                             <Input />
@@ -115,7 +123,7 @@ export default class Login extends Component {
                             <Input.Password />
                         </Form.Item>
 
-                    
+
                         <Form.Item {...tailLayout}>
                             <Button type="primary" htmlType="submit" >
                                 登录
@@ -148,10 +156,10 @@ export default class Login extends Component {
  */
 
 
-    /*
+/*
 1. 前台表单验证
 2. 收集表单输入数据
- */
+*/
 
 /*
 async和await

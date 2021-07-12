@@ -9,7 +9,7 @@ import {formateDate} from "../../utils/dateUtils"
 import {reqWeather,reqIP} from '../../api'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import LinkButton from "../Link-button"
-
+import cookie from "react-cookies"
 
 const { confirm } = Modal;
 
@@ -72,9 +72,8 @@ class Header extends Component {
            
             onOk: ()=> {
             //   console.log('确定');
-                // 删除保存的数据
-                memoryUtils.user = {}
-                storageUtils.removeUser()
+                // 删除cookie数据
+                cookie.remove('user')
                 //跳转到登录页面
                 this.props.history.replace('/login')
             },
