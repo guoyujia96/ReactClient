@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from "react-router-dom"
+import { Link, Redirect, withRouter } from "react-router-dom"
 import { Menu } from 'antd';
 import { PieChartOutlined } from '@ant-design/icons';
 
@@ -20,27 +20,30 @@ class LeftNav extends Component {
   hasAuth = (item) => {
     const { key, isPublic } = item
 
-    var cookieStr = cookie.load('user')
-    if(cookieStr) {
-      const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
-      const menus = user.role.menus;
-      const username = user.username
+    // const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
+    //   const menus = user.role.menus;
+    //   const username = user.username
 
-      // const menus = memoryUtils.user.role.menus
-      // const username = memoryUtils.user.username
-
-      /*
-      1. 如果当前用户是admin
-      2. 如果当前item是公开的
-      3. 当前用户有此item的权限: key有没有menus中
-       */
-      if (username === 'admin' || isPublic || menus.indexOf(key) !== -1) {
-        return true
-      } else if (item.children) { // 4. 如果当前用户有此item的某个子item的权限
-        return !!item.children.find(child => menus.indexOf(child.key) !== -1)
-      }
-
+    console.log('leftnav',memoryUtils.user)
+    if(memoryUtils.user === {}){
+      return <Redirect to="/login"/>
     }
+    const username = memoryUtils.user.username
+    const menus = memoryUtils.user.role.menus
+    // const username = '123'
+    // const menus = []
+
+    /*
+    1. 如果当前用户是admin
+    2. 如果当前item是公开的
+    3. 当前用户有此item的权限: key有没有menus中
+     */
+    if (username === 'admin' || isPublic || menus.indexOf(key) !== -1) {
+      return true
+    } else if (item.children) { // 4. 如果当前用户有此item的某个子item的权限
+      return !!item.children.find(child => menus.indexOf(child.key) !== -1)
+    }
+
     return false
   }
 

@@ -22,12 +22,16 @@ export default class Admin extends Component {
     render() {
         // const user = memoryUtils.user
         // console.log('admin',cookie.load('userId'))
-
-        var cookieStr = cookie.load('user')
-        if (!cookieStr) {
+        var userId = cookie.load('userId')
+        if(!userId){
             return <Redirect to="/login" />
         }
-        const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
+
+        // var cookieStr = cookie.load('user')
+        // if (!cookieStr) {
+        //     return <Redirect to="/login" />
+        // }
+        // const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
         
         // if (!user || !user._id) {
         //     // 在render中实现自动跳转到login

@@ -72,8 +72,10 @@ class Header extends Component {
            
             onOk: ()=> {
             //   console.log('确定');
-                // 删除cookie数据
-                cookie.remove('user')
+                // 删除保存的数据
+                memoryUtils.user = {}
+                // storageUtils.removeUser()
+                cookie.remove('userId')
                 //跳转到登录页面
                 this.props.history.replace('/login')
             },

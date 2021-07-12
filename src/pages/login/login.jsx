@@ -37,7 +37,8 @@ export default class Login extends Component {
                 console.log(result.data)
                 // 跳转之前保存数据到内存中
                 memoryUtils.user = result.data//id username password
-                storageUtils.saveUser(result.data)//id username password
+                console.log('login', memoryUtils.user)
+                // storageUtils.saveUser(result.data)//id username password
                 // 通过js实现页面跳转，在事件回调函数里的跳转
                 // 跳转到管理界面:因为不需要回退，所以不要push()用replace()
                 this.props.history.replace('/')
@@ -58,13 +59,18 @@ export default class Login extends Component {
         // 如果已经登录，自动跳转到管理页面
         // const user = memoryUtils.user
 
-        var cookieStr = cookie.load('user')
-        if (cookieStr) {
-            const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
-            // console.log('cookie' , user)
-            if (user && user._id) {
-                return <Redirect to="/" />
-            }
+        // var cookieStr = cookie.load('user')
+        // if (cookieStr) {
+        //     const user = JSON.parse(cookieStr.slice(2, cookieStr.length))
+        //     // console.log('cookie' , user)
+        //     if (user && user._id) {
+        //         return <Redirect to="/" />
+        //     }
+        // }
+
+        var userId = cookie.load('userId');
+        if(userId){
+            return <Redirect to="/" />
         }
 
         return (
